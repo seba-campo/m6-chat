@@ -1,7 +1,7 @@
-import {Router} from '@vaadin/router';
+import { Router } from "@vaadin/router";
 
-const router = new Router(document.getElementById('outlet'));
+const router = new Router(document.querySelector(".root"));
 router.setRoutes([
-  {path: '/', component: 'x-home-view'},
-  {path: '/users', component: 'x-user-list'}
+  { path: "/", component: "home-element" },
+  { path: "/users", component: "x-user-list" },
 ]);

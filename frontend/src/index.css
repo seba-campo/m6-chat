@@ -1,0 +1,27 @@
+*{
+    box-sizing: border-box;
+}
+
+body{
+    margin: 0;
+}
+
+.container{
+    display: flex;
+    flex-direction: column;
+
+}
+
+.header{
+    height: 7vh;
+    background-color: #FF8282;
+}   
+
+.chat{
+    height: 80vh;
+}
+
+.message-box{
+    display: flex;
+    flex-direction: column;
+}

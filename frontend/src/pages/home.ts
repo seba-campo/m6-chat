@@ -1,3 +1,5 @@
+import { Router } from "@vaadin/router";
+
 class Home extends HTMLElement {
   shadow = this.attachShadow({ mode: "open" });
   constructor() {
@@ -71,14 +73,28 @@ class Home extends HTMLElement {
         width: 60vw;
       }
 
+
+
       .welcome-start-button{
         border: 0px;
         height: 45px;
         width: 60vw;
         font-size: 15px;
-        background-color: 
+        font-weight: 600;
+        background-color: #cc00ff;
       }
       `;
+
+    const button = root.querySelector(".welcome-start-button");
+    const nameInput = root.querySelector(".welcome-name-input");
+
+    button?.addEventListener("click", () => {
+      const nameToSend = nameInput?.value;
+
+      Router.go("/chat");
+
+      // console.log();
+    });
 
     this.shadow.appendChild(style);
     this.shadow.appendChild(root);

@@ -4,9 +4,12 @@ import bodyParser from "body-parser";
 import { v4 as uuidv4 } from "uuid";
 import express from "express";
 import { db } from "./db";
+import cors from "cors";
 
 const app = express();
 const port = 3152;
+
+app.use(cors());
 
 app.get("/chatroom", (req, res) => {
   const chatRoomsRef = db.ref("/chatroom/messages/");

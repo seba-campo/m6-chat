@@ -1,10 +1,12 @@
 import "./pages/home";
 import "./pages/chat";
 import "./router";
+import { state } from "./state";
 
-const API_URL_BASE = "https://localhost:3152";
+export const API_URL_BASE = "http://localhost:3152";
 
 function main() {
+  state.init();
   console.log("hola");
 }
 

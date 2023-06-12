@@ -1,9 +1,13 @@
 {
   "dependencies": {
     "@vaadin/router": "^1.7.5",
+    "firebase": "8.7.1",
     "parcel": "^2.9.1"
   },
   "scripts": {
     "dev": "parcel serve ./src/index.html"
+  },
+  "devDependencies": {
+    "process": "^0.11.10"
   }
 }

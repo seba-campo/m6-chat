@@ -1,4 +1,5 @@
 import { Router } from "@vaadin/router";
+import { state } from "../state";
 
 class Home extends HTMLElement {
   shadow = this.attachShadow({ mode: "open" });
@@ -90,6 +91,7 @@ class Home extends HTMLElement {
 
     button?.addEventListener("click", () => {
       const nameToSend = nameInput?.value;
+      state.setName(nameToSend);
 
       Router.go("/chat");
 

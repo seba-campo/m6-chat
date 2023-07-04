@@ -17,3 +17,4 @@ chatRoomsRef.on('value', (snapshot) => {
 }); 
 
 export { db }
+

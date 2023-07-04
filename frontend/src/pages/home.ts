@@ -90,8 +90,8 @@ class Home extends HTMLElement {
     const nameInput = root.querySelector(".welcome-name-input");
 
     button?.addEventListener("click", () => {
-      const nameToSend = nameInput?.value;
-      state.setName(nameToSend);
+      // const nameToSend = nameInput?.value;
+      // state.setName(nameToSend);
 
       Router.go("/chat");
 

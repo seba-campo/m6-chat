@@ -1,7 +1,9 @@
 "use strict";
 
-import { API_URL_BASE } from ".";
+// import { API_URL_BASE } from ".";
 import { rtdb } from "./db";
+
+const API_URL_BASE = "http://localhost:3152"
 
 type Message = {
   from: string;
@@ -16,13 +18,16 @@ export const state = {
   listeners: [],
   init() {
     const chatroomRef = rtdb.ref("chatroom/messages");
+    const currentState = this.getState();
 
     chatroomRef.on("value", (snapshot) => {
       const messagesFromServer = snapshot.val();
-      console.log(messagesFromServer);
+      currentState.messages = messagesFromServer.messages
+      console.log(currentState)
+      this.setState(currentState)
     });
   },
-  subscribe() {
+  subscribe() { 
     // recibe callbacks para ser avisados posteriormente
   },
   getState() {
@@ -40,15 +45,16 @@ export const state = {
     });
   },
   getMessages() {
-    fetch(API_URL_BASE + "/messages", {
-      method: "get",
-    })
-      .then((res) => {
+    const messagesFromRtdb = fetch(API_URL_BASE + "/messages")
+    
+    messagesFromRtdb.then((res) => {
         res.json();
       })
-      .then((data) => {
-        return data;
+    messagesFromRtdb.then((data) => {
+        return data.json;
       });
+
+    return messagesFromRtdb
   },
   setState(newState) {
     // localStorage.setItem("currentState", JSON.stringify(newState));
@@ -60,18 +66,4 @@ export const state = {
 
     console.log("Se corrió setState() con: ", newState);
   },
-  //   initState() {
-  //     const computerPlay = this.generateComputerPlay();
-
-  //     const initialState = {
-  //       currentGame: { myPlay: "undefined", computerPlay: computerPlay },
-  //       history: [],
-  //       points: {
-  //         computer: 0,
-  //         player: 0,
-  //       },
-  //     };
-
-  //     this.setState(initialState);
-  //   },
 };

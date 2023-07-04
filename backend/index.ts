@@ -1,10 +1,10 @@
 import firebase from "firebase";
 import firebaseAdmin from "firebase-admin";
 import bodyParser from "body-parser";
-import { v4 as uuidv4 } from "uuid";
 import express from "express";
-import { db } from "./db";
 import cors from "cors";
+import { db } from "./db";
+import { v4 as uuidv4 } from "uuid";
 
 const app = express();
 const port = 3152;
@@ -19,8 +19,7 @@ app.get("/chatroom", (req, res) => {
     console.log(data);
 
     const randomId = uuidv4();
-    console.log(randomId);
-    res.send(randomId + data);
+    res.send(data);
   });
 });
 

@@ -11,13 +11,13 @@ class Chat extends HTMLElement {
   constructor() {
     super();
   }
-  connectedCallback() {
+  async connectedCallback() {
     this.render();
 
     const nameInState = state.getState();
     const messagesFromRtdb = state.getMessages();
 
-    console.log(messagesFromRtdb);
+    console.log(await messagesFromRtdb) 
   }
   messages: Message[] = [];
   render() {

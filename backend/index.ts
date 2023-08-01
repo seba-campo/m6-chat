@@ -12,7 +12,7 @@ const port = 3152;
 app.use(cors());
 
 app.get("/chatroom", (req, res) => {
-  const chatRoomsRef = db.ref("/chatroom/messages/");
+  const chatRoomsRef = db.ref("/chatroom/");
 
   chatRoomsRef.on("value", (snapshot) => {
     const data = snapshot.val();
@@ -30,20 +30,20 @@ app.get("/messages", (req, res) => {
     const response = snapshot.val();
     res.send(response);
     console.log(response);
-
-    // response.json().then((data: any) => {
-    //   res.send(data);
-    //   console.log(data);
-    // });
-
-    // const randomId = uuidv4();
-    // console.log(randomId);
-    // res.send(randomId + data);
   });
 });
 
 app.post("/messages", (req, res) => {
   const chatRoomsRef = db.ref("/chatroom/messages/");
+  console.log(bodyParser(req.body));
+  // console.log(res);
+
+  return false;
+  // chatRoomsRef.set({
+  //   username: name,
+  //   email: email,
+  //   profile_picture : imageUrl
+  // });
 });
 
 app.listen(port, () => {

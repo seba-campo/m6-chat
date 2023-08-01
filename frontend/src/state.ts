@@ -22,9 +22,11 @@ export const state = {
 
     chatroomRef.on("value", (snapshot) => {
       const messagesFromServer = snapshot.val();
-      currentState.messages = messagesFromServer.messages
-      console.log(currentState)
-      this.setState(currentState)
+      // currentState.messages = messagesFromServer.messages
+      // console.log(messagesFromServer)
+      currentState.messages = messagesFromServer;
+      
+      this.setState(currentState) 
     });
   },
   subscribe() { 
@@ -38,32 +40,26 @@ export const state = {
     cs.name = nombre;
     this.setState(cs);
   },
-  pushMessage(message) {
+  pushMessage(message: string) {
+    const cs = this.getState();
+    const messageToSend: Message = {
+      from: cs.name,
+      message: message
+    };
+
     fetch(API_URL_BASE + "/messages", {
       method: "post",
-      body: JSON.stringify(message),
+      body: JSON.stringify(messageToSend),
     });
   },
   getMessages() {
-    const messagesFromRtdb = fetch(API_URL_BASE + "/messages")
-    
-    messagesFromRtdb.then((res) => {
-        res.json();
-      })
-    messagesFromRtdb.then((data) => {
-        return data.json;
-      });
-
-    return messagesFromRtdb
+    const messageList = this.getState();
+    return messageList.messages
   },
   setState(newState) {
-    // localStorage.setItem("currentState", JSON.stringify(newState));
     this.data = newState;
-
     for (const cb of this.listeners) {
       cb();
     }
-
-    console.log("Se corrió setState() con: ", newState);
   },
 };

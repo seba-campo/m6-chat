@@ -9,7 +9,7 @@ const app = firebase.initializeApp({
 
 const db = firebase.database();
 
-const chatRoomsRef = db.ref('/chatrooms/2353');
+const chatRoomsRef = db.ref('/chatrooms/2353')
 
 chatRoomsRef.on('value', (snapshot) => {
     const data = snapshot.val();

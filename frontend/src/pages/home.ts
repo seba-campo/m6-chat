@@ -7,7 +7,7 @@ class Home extends HTMLElement {
     // Always call super first in constructor
     super();
     this.render();
-    // write element functionality in here
+    state.init();
   }
   render() {
     const root = document.createElement("div");
@@ -87,15 +87,13 @@ class Home extends HTMLElement {
       `;
 
     const button = root.querySelector(".welcome-start-button");
-    const nameInput = root.querySelector(".welcome-name-input");
+    const nameInput = root.querySelector(".welcome-name-input") as HTMLInputElement;
 
     button?.addEventListener("click", () => {
-      // const nameToSend = nameInput?.value;
-      // state.setName(nameToSend);
+      const nameToSend = nameInput?.value;
+      state.setName(nameToSend);
 
       Router.go("/chat");
-
-      // console.log();
     });
 
     this.shadow.appendChild(style);

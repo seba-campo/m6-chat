@@ -12,7 +12,7 @@
     "uuid": "^9.0.0"
   },
   "scripts": {
-    "dev": "nodemon --watch './index.ts' --ext 'ts,json'  --exec ts-node ./index.ts"
+    "dev": "nodemon --watch './' --ext 'ts,json'  --exec ts-node ./index.ts"
   },
   "devDependencies": {
     "process": "^0.11.10"

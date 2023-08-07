@@ -26,16 +26,15 @@ export const state = {
             // console.log(messagesFromServer)
             var messagesToAppend: any = [];
             for (const key in messagesFromServer) {
-                console.log(messagesFromServer[key]);
                 messagesToAppend.push(messagesFromServer[key]);
             }
             currentState.messages = messagesToAppend;
-
             this.setState(currentState);
         });
     },
-    subscribe() {
+    subscribe(cb: (any) => any) {
         // recibe callbacks para ser avisados posteriormente
+        this.listeners.push(cb);
     },
     getState() {
         return this.data;
@@ -47,7 +46,6 @@ export const state = {
     },
     pushMessage(message: string) {
         const nombreDelState = this.data.name;
-
         fetch(API_URL_BASE + "/messages", {
             method: "post",
             headers: { "content-type": "application/json" },

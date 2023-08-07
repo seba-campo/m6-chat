@@ -2,6 +2,7 @@
   "dependencies": {
     "@vaadin/router": "^1.7.5",
     "firebase": "8.7.1",
+    "lodash": "^4.17.21",
     "parcel": "^2.9.1"
   },
   "scripts": {

@@ -3,63 +3,68 @@
 // import { API_URL_BASE } from ".";
 import { rtdb } from "./db";
 
-const API_URL_BASE = "http://localhost:3152"
+const API_URL_BASE = "http://localhost:3152";
 
 type Message = {
-  from: string;
-  message: string;
+    from: string;
+    message: string;
 };
 
 export const state = {
-  data: {
-    name: "",
-    messages: [],
-  },
-  listeners: [],
-  init() {
-    const chatroomRef = rtdb.ref("chatroom/messages");
-    const currentState = this.getState();
+    data: {
+        name: "",
+        messages: [],
+    },
+    listeners: [],
+    init() {
+        const chatroomRef = rtdb.ref("chatroom/messages");
+        const currentState = this.getState();
 
-    chatroomRef.on("value", (snapshot) => {
-      const messagesFromServer = snapshot.val();
-      // currentState.messages = messagesFromServer.messages
-      // console.log(messagesFromServer)
-      currentState.messages = messagesFromServer;
-      
-      this.setState(currentState) 
-    });
-  },
-  subscribe() { 
-    // recibe callbacks para ser avisados posteriormente
-  },
-  getState() {
-    return this.data;
-  },
-  setName(nombre: string) {
-    const cs = this.getState();
-    cs.name = nombre;
-    this.setState(cs);
-  },
-  pushMessage(message: string) {
-    const cs = this.getState();
-    const messageToSend: Message = {
-      from: cs.name,
-      message: message
-    };
+        chatroomRef.on("value", (snapshot) => {
+            const messagesFromServer = snapshot.val();
+            // currentState.messages = messagesFromServer.messages
+            // console.log(messagesFromServer)
+            var messagesToAppend: any = [];
+            for (const key in messagesFromServer) {
+                console.log(messagesFromServer[key]);
+                messagesToAppend.push(messagesFromServer[key]);
+            }
+            currentState.messages = messagesToAppend;
 
-    fetch(API_URL_BASE + "/messages", {
-      method: "post",
-      body: JSON.stringify(messageToSend),
-    });
-  },
-  getMessages() {
-    const messageList = this.getState();
-    return messageList.messages
-  },
-  setState(newState) {
-    this.data = newState;
-    for (const cb of this.listeners) {
-      cb();
-    }
-  },
+            this.setState(currentState);
+        });
+    },
+    subscribe() {
+        // recibe callbacks para ser avisados posteriormente
+    },
+    getState() {
+        return this.data;
+    },
+    setName(nombre: string) {
+        const cs = this.getState();
+        cs.name = nombre;
+        this.setState(cs);
+    },
+    pushMessage(message: string) {
+        const nombreDelState = this.data.name;
+
+        fetch(API_URL_BASE + "/messages", {
+            method: "post",
+            headers: { "content-type": "application/json" },
+            body: JSON.stringify({
+                from: nombreDelState,
+                message: message,
+            }),
+        });
+    },
+    getMessages() {
+        const messageList = this.getState();
+        return messageList.messages;
+    },
+    setState(newState) {
+        this.data = newState;
+        for (const cb of this.listeners) {
+            cb();
+        }
+    },
 };

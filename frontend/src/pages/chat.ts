@@ -1,46 +1,41 @@
 import { Router } from "@vaadin/router";
 import { state } from "../state";
-import map from "lodash/map"
+import map from "lodash/map";
 import { log } from "console";
 
 type Message = {
-  from: string;
-  message: string;
+    from: string;
+    message: string;
 };
 
 class Chat extends HTMLElement {
-  shadow = this.attachShadow({ mode: "open" });
-  constructor() {
-    super();
-  }
-  connectedCallback() {
-    const messagesFromState = state.getMessages();
-
-    if(messagesFromState.length != 0){
-      this.messages = messagesFromState
-      this.render();
-    }else{ 
-      console.log("inicializo")
-      state.init();
-      console.log("obtengo")
-      setTimeout(()=>{
-        const newMessages = state.getMessages();
-        console.log(newMessages)
-        this.messages = newMessages
-
-        this.render();
-      },2000)  
+    shadow = this.attachShadow({ mode: "open" });
+    constructor() {
+        super();
     }
-   
-    
-  }
-  messages: Message[] = []
-  render() {
-    const root = document.createElement("div");
-    const style = document.createElement("style");
+    connectedCallback() {
+        const messagesFromState = state.getMessages();
 
- 
-    root.innerHTML = `
+        if (messagesFromState.length != 0) {
+            this.messages = messagesFromState;
+            this.render();
+        } else {
+            console.log("inicializo");
+            state.init();
+            console.log("obtengo");
+            setTimeout(() => {
+                const newMessages = state.getMessages();
+                this.messages = newMessages;
+                this.render();
+            }, 1000);
+        }
+    }
+    messages: Message[] = [];
+    render() {
+        const root = document.createElement("div");
+        const style = document.createElement("style");
+
+        root.innerHTML = `
       <div class="chat-root-div">
         <div class="chat-root-div__title-div">
           <h1 class="chat-root-div__tile-h1">CHAT PAGE</h1>  
@@ -58,7 +53,7 @@ class Chat extends HTMLElement {
                 </div>
               </div>
               `;
-            })}
+          })}
             </p>
         </div>
         <form class="input-msj-form">
@@ -66,10 +61,9 @@ class Chat extends HTMLElement {
             <button class="input-btn">></button>
         </form>
       </div>
-      `
-    ;
+      `;
 
-    style.textContent = `
+        style.textContent = `
       .chat-root-div{
         display: flex;
         flex-direction: column;
@@ -109,17 +103,18 @@ class Chat extends HTMLElement {
       }
       `;
 
-      const formMsj = root.querySelector(".input-msj-form");
-      const msjEl = root.querySelector(".input-text") as HTMLInputElement;
-      const msjBtn = root.querySelector(".input-btn");
-      
-      formMsj?.addEventListener("submit", (e)=>{
-        e.preventDefault()
-        console.log(msjEl.value)
-      })
+        const formMsj = root.querySelector(".input-msj-form");
+        const msjEl = root.querySelector(".input-text") as HTMLInputElement;
+        const msjBtn = root.querySelector(".input-btn");
 
-      this.shadow.appendChild(style);
-      this.shadow.appendChild(root);
+        formMsj?.addEventListener("submit", (e) => {
+            e.preventDefault();
+            state.pushMessage(msjEl.value);
+            console.log(msjEl.value);
+        });
+
+        this.shadow.appendChild(style);
+        this.shadow.appendChild(root);
     }
 }
 

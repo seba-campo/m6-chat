@@ -47,30 +47,32 @@ class Chat extends HTMLElement {
           <p>${this.messages
               .map((element) => {
                   return `
-              <div class="message-div">
-                <div class="message-from-div">
-                  <p class="message-from">${element.from}</p>
-                </div>
-                <div class="message-text-div">
-                  <p class="message-text">${element.message}</p>
-                </div>
-              </div>
-              `;
+                  <div class="message-div">
+                    <div class="message-from-div">
+                      <p class="message-from">${element.from}</p>
+                    </div>
+                    <div class="message-text-div">
+                      <p class="message-text">${element.message}</p>
+                    </div>
+                  </div>
+                  `;
               })
               .join("")}
             </p>
+            </div>
             <form class="input-msj-form">
                 <input type="text" class="input-text" placeholder="escribe tu mensaje aqui">
                 <button class="input-btn">Enviar</button>
             </form>
-        </div>
       </div>
       `;
+      this.addListeners();
+            
 
-        this.addListeners();
 
-        const style = document.createElement("style");
-        style.textContent = `
+
+      const style = document.createElement("style");
+      style.textContent = `
       .chat-root-div{
         height: 100vh;
         display: flex;
@@ -94,12 +96,15 @@ class Chat extends HTMLElement {
       }
 
       .message-div{
+        filter: opacity(100%);
         max-width: 10vw;
         max-height: 14vh;
+        padding: 8px 4px;
         display: flex; 
         flex-direction: column;
-        background-color: #796476;
-        color: white;
+        background-color: #025c4c;
+        color: #ccdedb;
+        border-radius: 4px;
       }
 
       .message-from{
@@ -135,8 +140,13 @@ class Chat extends HTMLElement {
         font-weight: 600;
         background-color: #cc00ff;
       }
+
+      .right{
+        align-self: flex-end
+      }
       `;
-        this.appendChild(style);
+
+      this.appendChild(style);
     }
 }
 

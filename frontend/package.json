@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "@types/node": "^20.4.8",
     "@vaadin/router": "^1.7.5",
     "firebase": "8.7.1",
     "lodash": "^4.17.21",

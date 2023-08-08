@@ -21,8 +21,18 @@ class Home extends HTMLElement {
             <h2 class="welcome-title">Bienvenido</h2>
           </div>
           <div class="welcome-input-div">
-            <h5 class="welcome-name">Tu nombre</h5>
-            <input type="text" class="welcome-name-input" name="name" id="" placeholder="Tu nombre aqui">
+            <h5 class="welcome-name">Email</h5>
+            <input type="text" class="welcome-input" name="name" id="email" placeholder="example@example.com">
+
+            <h5 class="welcome-name">Nombre</h5>
+            <input type="text" class="welcome-input" name="name" id="name" placeholder="Tu nombre aqui">
+
+            <h5 class="welcome-name">Room</h5>
+            <select class="welcome-input" id="select">
+            <option value="new-room">Nueva room</option>
+            <option value="pre-room">Room existente</option>
+            </select>
+
             <button class="welcome-start-button">Comenzar</button>
           </div>
         </div>
@@ -45,20 +55,20 @@ class Home extends HTMLElement {
         background-color: #1E1D40;
         display: flex;
         flex-direction: column;
-        flex-flow: column;
         align-items: center;
+        justify-content: flex-start;
         height: 93vh;
         padding: 40px 0;
       }
 
       .welcome-title{
         color: #3ad900;
-        font-size: 30px;
+        font-size: 34px;
       }
       
       .welcome-name{
         color: #cc00ff;
-        font-size: 17px;
+        font-size: 20px;
       }
 
       .welcome-input-div{
@@ -69,25 +79,24 @@ class Home extends HTMLElement {
         justify-content: space-between;
       }
 
-      .welcome-name-input{
-        height: 45px;
-        width: 60vw;
+      .welcome-input{
+        font-size: 20px;
+        width: 30vw;
       }
 
-
-
       .welcome-start-button{
+        margin: 50px 0px;
         border: 0px;
-        height: 45px;
-        width: 60vw;
-        font-size: 15px;
+        height: 55px;
+        width: 30vw;
+        font-size: 25px;
         font-weight: 600;
         background-color: #cc00ff;
       }
       `;
 
     const button = root.querySelector(".welcome-start-button");
-    const nameInput = root.querySelector(".welcome-name-input") as HTMLInputElement;
+    const nameInput = root.querySelector(".welcome-input") as HTMLInputElement;
 
     button?.addEventListener("click", () => {
       const nameToSend = nameInput?.value;

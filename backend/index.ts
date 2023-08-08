@@ -18,8 +18,6 @@ app.get("/chatroom", (req, res) => {
     chatRoomsRef.on("value", (snapshot) => {
         const data = snapshot.val();
         console.log(data);
-
-        const randomId = uuidv4();
         res.send(data);
     });
 });

@@ -67,9 +67,6 @@ class Chat extends HTMLElement {
       </div>
       `;
       this.addListeners();
-            
-
-
 
       const style = document.createElement("style");
       style.textContent = `

@@ -103,17 +103,24 @@ app.post("/rooms", (req, res) => {
 
 // Ingrear a ROOM, mediante su roomID sencillo
 app.get("/rooms/:id", (req, res) => {
-    const roomIdSimple = req.params.id;
+    const userId = req.query.userId;
+    const roomId = req.params.id;
 
-    // Buscar en la DB si existe el ID
-    roomRefDb
-        .doc(roomIdSimple?.toString())
+    userRef
+        .doc(userId?.toString())
         .get()
         .then((doc) => {
             if (doc.exists) {
-                // const docRtdbId =
-                res.json({
-                    roomId: doc.data,
+                roomRefDb
+                    .doc(roomId.toString())
+                    .get()
+                    .then((doc) => {
+                        res.json(doc.data());
+                    });
+            } else {
+                console.log(req.body);
+                res.status(401).json({
+                    message: "User not found",
                 });
             }
         });

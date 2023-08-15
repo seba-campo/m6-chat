@@ -20,9 +20,7 @@ app.get("/chatroom", (req, res) => {
         console.log(data);
         res.send(data);
     });
-    const userRef = db.collection("users");
-    console.log(userRef.doc("7L3ZeTEkN4JegZxZ9TS5").);
-}); 
+});
 
 app.get("/messages", (req, res) => {
     const chatRoomsRef = rtdb.ref("/chatroom/messages/");

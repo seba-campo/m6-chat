@@ -1,10 +1,7 @@
-import firebase from "firebase";
-import firebaseAdmin from "firebase-admin";
 import bodyParser from "body-parser";
 import express from "express";
 import cors from "cors";
 import { rtdb, db } from "./db";
-import { v4 as uuidv4 } from "uuid";
 
 const app = express();
 const port = 3152;

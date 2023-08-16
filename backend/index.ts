@@ -73,12 +73,12 @@ app.post("/rooms", (req, res) => {
 
                 roomRef
                     .set({
-                        messages: ["test"],
+                        messages: ["Chat inicializado"],
                         owner: userId,
                     })
                     .then((rtdbRes) => {
                         const roomLongId = roomRef.key;
-                        const roomId = nanoid(4).toLowerCase();
+                        const roomId = nanoid(4).toUpperCase();
                         // const roomId = 1000 + Math.floor(Math.random() * 999);
 
                         roomRefDb
@@ -124,6 +124,29 @@ app.get("/rooms/:id", (req, res) => {
                 });
             }
         });
+});
+
+// Obtener mensajes de una ROOM, desde la RTDB
+app.get("/messages/:room", (req, res) => {
+    const roomId = req.params.room;
+    const chatRoomsRef = rtdb.ref("/rooms/" + roomId);
+
+    chatRoomsRef.on("value", (snapshot) => {
+        const response = snapshot.val();
+        res.send(response);
+        console.log(response);
+    });
+});
+
+// Pushear un mensaje
+app.post("/messages/:room", (req, res) => {
+    const roomId = req.params.room;
+    const chatRoomsRef = rtdb.ref("/rooms/" + roomId + "/messages");
+
+    chatRoomsRef.push(req.body, () => {
+        console.log(req.body);
+        res.json(req.body + "todo ok");
+    });
 });
 
 app.listen(port, () => {

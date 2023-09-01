@@ -22,16 +22,21 @@ class Home extends HTMLElement {
           </div>
           <div class="welcome-input-div">
             <h5 class="welcome-name">Email</h5>
-            <input type="text" class="welcome-input" name="name" id="email" placeholder="example@example.com">
+            <input type="text" class="email-input" name="name" id="email" placeholder="example@example.com">
 
             <h5 class="welcome-name">Nombre</h5>
             <input type="text" class="welcome-input" name="name" id="name" placeholder="Tu nombre aqui">
 
             <h5 class="welcome-name">Room</h5>
             <select class="welcome-input" id="select">
-            <option value="new-room">Nueva room</option>
-            <option value="pre-room">Room existente</option>
+              <option id="option__nueva-room" value="new-room">Nueva room</option>
+              <option id="option__pre-room" value="pre-room">Room existente</option>
             </select>
+
+            <div class="room-id-div">
+              <h5 class="welcome-name">Room</h5>
+              <input type="text" class="welcome-input" name="name" id="name" placeholder="Tu nombre aqui">
+            </div>
 
             <button class="welcome-start-button">Comenzar</button>
           </div>
@@ -56,7 +61,7 @@ class Home extends HTMLElement {
         display: flex;
         flex-direction: column;
         align-items: center;
-        justify-content: flex-start;
+        justify-content: space-around;
         height: 93vh;
         padding: 40px 0;
       }
@@ -75,7 +80,7 @@ class Home extends HTMLElement {
         display: flex;
         flex-direction: column;
         align-items: center;
-        height: 200px;
+        height: 93vh;
         justify-content: space-between;
       }
 
@@ -85,10 +90,10 @@ class Home extends HTMLElement {
       }
 
       .welcome-start-button{
-        margin: 50px 0px;
+        margin: 20px 0px;
         border: 0px;
         height: 55px;
-        width: 30vw;
+        width: 30vw; 
         font-size: 25px;
         font-weight: 600;
         background-color: #cc00ff;
@@ -97,13 +102,60 @@ class Home extends HTMLElement {
 
     const button = root.querySelector(".welcome-start-button");
     const nameInput = root.querySelector(".welcome-input") as HTMLInputElement;
+    const mailInput = root.querySelector(".email-input") as HTMLInputElement;
+
+    const select = root.querySelector('select');
+		
 
     button?.addEventListener("click", () => {
-      const nameToSend = nameInput?.value;
-      state.setName(nameToSend);
+      const userName = nameInput?.value;
+      const userMail = mailInput.value;
 
-      Router.go("/chat");
+      // intento LOGIN
+      state.tryLogin(userMail)
+        .then((res)=>{
+
+          if(res.status == 200){
+            return res.json()
+          }
+          else{
+            // Usuario no existe, lo registro
+            state.registerNewUser(userName, userMail)
+              
+              .then((res)=>{
+                return res.json()
+              })
+              .then((data)=>{
+                // consoleo ID
+                console.log(data)
+                state.setUserId(data.id)
+                state.setName(userName)
+              })
+          }
+
+        }).then((data)=>{
+          // consoleo ID
+          console.log(data)
+          state.setUserId(data.id)
+          state.setName(userName)
+        });
+
+        const selectedOption = select?.options[select.selectedIndex].value;
+
+        if(selectedOption == "pre-room"){
+
+        }
+
+        if(selectedOption == "new-room"){
+
+        }
+
+        // console.log(selectedOption)
     });
+
+   
+
+
 
     this.shadow.appendChild(style);
     this.shadow.appendChild(root);

@@ -13,6 +13,8 @@ type Message = {
 export const state = {
     data: {
         name: "",
+        userId: "",
+        chatroomId: "",
         messages: [],
     },
     listeners: [],
@@ -43,6 +45,39 @@ export const state = {
         const cs = this.getState();
         cs.name = nombre;
         this.setState(cs);
+    },
+    setUserId(id: string){
+        const cs = this.getState();
+        cs.userId = id;
+        this.setState(cs);
+    },
+    tryLogin(email: string){
+        return fetch(API_URL_BASE + "/auth", {
+            method: "post",
+            headers: { "content-type": "application/json" },
+            body: JSON.stringify({
+                email: email
+            }),
+        });
+    },
+    registerNewUser(name: string,email: string){
+        return fetch(API_URL_BASE + "/signup", {
+            method: "post",
+            headers: { "content-type": "application/json" },
+            body: JSON.stringify({
+                nombre: name,
+                email: email
+            }),
+        });
+    },
+    createRoom(userId: string){
+        return fetch(API_URL_BASE + "/rooms", {
+            method: "post",
+            headers: { "content-type": "application/json" },
+            body: JSON.stringify({
+                userId: userId
+            }),
+        });
     },
     pushMessage(message: string) {
         const nombreDelState = this.data.name;

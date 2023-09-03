@@ -51,6 +51,11 @@ export const state = {
         cs.userId = id;
         this.setState(cs);
     },
+    setChatroomId(chatRoomid: string){
+        const cs = this.getState();
+        cs.chatroomId = chatRoomid;
+        this.setState(cs);
+    },
     tryLogin(email: string){
         return fetch(API_URL_BASE + "/auth", {
             method: "post",
@@ -76,7 +81,7 @@ export const state = {
             headers: { "content-type": "application/json" },
             body: JSON.stringify({
                 userId: userId
-            }),
+            })
         });
     },
     pushMessage(message: string) {

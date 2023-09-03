@@ -110,6 +110,7 @@ class Home extends HTMLElement {
     button?.addEventListener("click", () => {
       const userName = nameInput?.value;
       const userMail = mailInput.value;
+      const selectedOption = select?.options[select.selectedIndex].value;
 
       // intento LOGIN
       state.tryLogin(userMail)
@@ -130,25 +131,57 @@ class Home extends HTMLElement {
                 console.log(data)
                 state.setUserId(data.id)
                 state.setName(userName)
+                if(selectedOption == "pre-room"){
+          
+                }
+        
+                if(selectedOption == "new-room"){
+                  const cs = state.getState();
+                  const userId = cs.userId;
+                  const newCreatedRoom = state.createRoom(userId)
+                  newCreatedRoom.then((res)=>{
+                    console.log(res)
+                  });        
+                }
               })
           }
 
         }).then((data)=>{
           // consoleo ID
-          console.log(data)
           state.setUserId(data.id)
           state.setName(userName)
+          if(selectedOption == "pre-room"){
+          
+          }
+  
+          if(selectedOption == "new-room"){
+            const cs = state.getState();
+            const userId = cs.userId;
+            const newCreatedRoom = state.createRoom(userId)
+            newCreatedRoom.then((res)=>{
+              console.log(res)
+            });  
+          }
         });
 
-        const selectedOption = select?.options[select.selectedIndex].value;
+   
 
-        if(selectedOption == "pre-room"){
+        // if(selectedOption == "pre-room"){
+          
+        // }
 
-        }
+        // if(selectedOption == "new-room"){
+        //   const cs = state.getState();
+        //   console.log(cs)
+        //   const userId = cs.userId;
+        //   console.log(userId)
+        //   // const newCreatedRoom = state.createRoom(userId)
+        //   // newCreatedRoom.then((res)=>{
+        //   //   console.log(res)
+        //   // });
+        //   // state.setChatroomId(newCreatedRoom)
 
-        if(selectedOption == "new-room"){
-
-        }
+        // }
 
         // console.log(selectedOption)
     });

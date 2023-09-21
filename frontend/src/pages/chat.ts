@@ -1,7 +1,6 @@
 import { Router } from "@vaadin/router";
 import { state } from "../state";
 import map from "lodash/map";
-import { log } from "console";
 
 type Message = {
     from: string;
@@ -14,27 +13,28 @@ class Chat extends HTMLElement {
         super();
     }
     connectedCallback() {
-        state.subscribe(() => {
-            const cs = state.getState();
-            this.messages = cs.messages;
-            this.render();
-        });
+      state.subscribe(() => {
+          const cs = state.getState();
+          this.messages = cs.messages;
+          console.log(cs.messages)
+          this.render();
+      });
 
-        const newMessages = state.getMessages();
-        this.messages = newMessages;
-        setTimeout(() => {
-            this.render();
-        }, 500);
+      const newMessages = state.getMessages();
+      this.messages = newMessages;
+      setTimeout(() => {
+          this.render();
+      }, 500);
     }
     messages: Message[] = [];
     addListeners() {
-        const formMsj = this.querySelector(".input-msj-form");
-        const msjEl = this.querySelector(".input-text") as HTMLInputElement;
+      const formMsj = this.querySelector(".input-msj-form");
+      const msjEl = this.querySelector(".input-text") as HTMLInputElement;
 
-        formMsj?.addEventListener("submit", (e) => {
-            e.preventDefault();
-            state.pushMessage(msjEl.value);
-        });
+      formMsj?.addEventListener("submit", (e) => {
+          e.preventDefault();
+          state.pushMessage(msjEl.value);
+      });
     }
     render() {
         this.innerHTML = `

@@ -13,26 +13,36 @@ type Message = {
 export const state = {
     data: {
         name: "",
+        email: "",
         userId: "",
         chatroomId: "",
+        rtdbChatroomId: "",
         messages: [],
     },
     listeners: [],
-    init() {
-        const chatroomRef = rtdb.ref("chatroom/messages");
-        const currentState = this.getState();
+    initChat(callback) {
+        const cs = this.getState();
+        const chatroomRef = rtdb.ref("/rooms/" + cs.rtdbChatroomId);
 
         chatroomRef.on("value", (snapshot) => {
             const messagesFromServer = snapshot.val();
-            // currentState.messages = messagesFromServer.messages
-            // console.log(messagesFromServer)
             var messagesToAppend: any = [];
             for (const key in messagesFromServer) {
                 messagesToAppend.push(messagesFromServer[key]);
             }
-            currentState.messages = messagesToAppend;
-            this.setState(currentState);
+            cs.messages = messagesToAppend;
+            this.setState(cs);
         });
+
+        callback();
+    },
+    init2(userName, userMail){
+        // Seteo Nombre y Mail para validar
+        state.setNameAndMail(userName, userMail)
+        // Valido nombre y mail
+        state.login(()=>{
+            console.log("se logeo correctamente");
+        })
     },
     subscribe(cb: (any) => any) {
         // recibe callbacks para ser avisados posteriormente
@@ -41,9 +51,10 @@ export const state = {
     getState() {
         return this.data;
     },
-    setName(nombre: string) {
+    setNameAndMail(nombre: string, mail: string){
         const cs = this.getState();
         cs.name = nombre;
+        cs.email = mail;
         this.setState(cs);
     },
     setUserId(id: string){
@@ -56,44 +67,90 @@ export const state = {
         cs.chatroomId = chatRoomid;
         this.setState(cs);
     },
-    tryLogin(email: string){
-        return fetch(API_URL_BASE + "/auth", {
-            method: "post",
-            headers: { "content-type": "application/json" },
-            body: JSON.stringify({
-                email: email
-            }),
-        });
+    setRtdbId(rtdbId: string){
+        const cs = this.getState();
+        cs.rtdbChatroomId = rtdbId;
+        this.setState(cs);
     },
-    registerNewUser(name: string,email: string){
+    login(callback){
+        const cs = this.getState();
+
+        if(cs.email){
+            fetch(API_URL_BASE + "/auth", {
+                method: "post",
+                headers: { "content-type": "application/json" },
+                body: JSON.stringify({
+                    email: cs.email
+                }),
+            }).then((res)=>{
+                if(res.status == 200){
+                    return res.json();
+                }
+                else{
+                    console.log("Registrando usuario...")
+                    return this.registerNewUser()
+                }
+            }).then((data)=>{
+                this.setUserId(data.id);
+                callback();
+            });
+        }
+    },
+    registerNewUser(callback){
+        const cs = this.getState();
+
         return fetch(API_URL_BASE + "/signup", {
             method: "post",
             headers: { "content-type": "application/json" },
             body: JSON.stringify({
-                nombre: name,
-                email: email
+                nombre: cs.name,
+                email: cs.email
             }),
-        });
+        }).then((res)=>{
+            return res.json();
+        })
     },
-    createRoom(userId: string){
-        return fetch(API_URL_BASE + "/rooms", {
-            method: "post",
-            headers: { "content-type": "application/json" },
-            body: JSON.stringify({
-                userId: userId
-            })
-        });
+    createRoom(callback){
+        const cs = this.getState();
+        if(cs.userId){
+            fetch(API_URL_BASE + "/rooms", {
+                method: "post",
+                headers: { "content-type": "application/json" },
+                body: JSON.stringify({
+                    userId: cs.userId
+                })
+            }).then(res=>{
+                return res.json();
+            }).then(data =>{
+                this.setChatroomId(data.id);
+                callback();
+            });
+        }
+    },
+    connectToRoom(callback){
+        const cs = this.getState();
+        if(cs.userId && cs.chatroomId){
+            fetch(API_URL_BASE + "/rooms/"+ cs.chatroomId + "?userId=" + cs.userId).then(res=>{
+                return res.json();
+            }).then(data =>{
+                this.setRtdbId(data.rtdbRoomId);
+                callback();
+            });
+        }
     },
     pushMessage(message: string) {
-        const nombreDelState = this.data.name;
-        fetch(API_URL_BASE + "/messages", {
-            method: "post",
-            headers: { "content-type": "application/json" },
-            body: JSON.stringify({
-                from: nombreDelState,
-                message: message,
-            }),
-        });
+        const cs = this.getState();
+
+        if(cs.rtdbChatroomId){
+            fetch(API_URL_BASE + "/messages/" + cs.rtdbChatroomId, {
+                method: "post",
+                headers: { "content-type": "application/json" },
+                body: JSON.stringify({
+                    from: cs.name,
+                    message: message,
+                }),
+            });
+        }
     },
     getMessages() {
         const messageList = this.getState();

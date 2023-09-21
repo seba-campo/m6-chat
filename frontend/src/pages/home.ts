@@ -7,7 +7,7 @@ class Home extends HTMLElement {
     // Always call super first in constructor
     super();
     this.render();
-    state.init();
+    // state.init();
   }
   render() {
     const root = document.createElement("div");
@@ -35,7 +35,7 @@ class Home extends HTMLElement {
 
             <div class="room-id-div">
               <h5 class="welcome-name">Room</h5>
-              <input type="text" class="welcome-input" name="name" id="name" placeholder="Tu nombre aqui">
+              <input type="text" class="room-input" name="name" id="name" placeholder="Room ID">
             </div>
 
             <button class="welcome-start-button">Comenzar</button>
@@ -84,7 +84,9 @@ class Home extends HTMLElement {
         justify-content: space-between;
       }
 
-      .welcome-input{
+      .welcome-input,
+      .email-input,
+      .room-input{
         font-size: 20px;
         width: 30vw;
       }
@@ -103,92 +105,42 @@ class Home extends HTMLElement {
     const button = root.querySelector(".welcome-start-button");
     const nameInput = root.querySelector(".welcome-input") as HTMLInputElement;
     const mailInput = root.querySelector(".email-input") as HTMLInputElement;
+    const chatroomInput = root.querySelector(".room-input") as HTMLInputElement
 
     const select = root.querySelector('select');
 		
 
     button?.addEventListener("click", () => {
+      // Obtengo los valores
       const userName = nameInput?.value;
       const userMail = mailInput.value;
+      state.setNameAndMail(userName, userMail)
+
       const selectedOption = select?.options[select.selectedIndex].value;
-
-      // intento LOGIN
-      state.tryLogin(userMail)
-        .then((res)=>{
-
-          if(res.status == 200){
-            return res.json()
-          }
-          else{
-            // Usuario no existe, lo registro
-            state.registerNewUser(userName, userMail)
-              
-              .then((res)=>{
-                return res.json()
+      
+      if(selectedOption == "pre-room"){
+        // Obtengo el ROOM a ingresar, y lo seteo en el STATE
+        const chatroomId = chatroomInput.value;
+        state.setChatroomId(chatroomId)
+      }
+      if(selectedOption == "new-room"){
+        state.login(()=>{
+          console.log("Logged in")
+          state.createRoom(()=>{
+            console.log("Room created")
+            state.connectToRoom(()=>{
+              console.log("Connected to Room")
+              state.initChat(()=>{
+                console.log("Chat inicializado")
+                Router.go("/chat")
               })
-              .then((data)=>{
-                // consoleo ID
-                console.log(data)
-                state.setUserId(data.id)
-                state.setName(userName)
-                if(selectedOption == "pre-room"){
-          
-                }
-        
-                if(selectedOption == "new-room"){
-                  const cs = state.getState();
-                  const userId = cs.userId;
-                  const newCreatedRoom = state.createRoom(userId)
-                  newCreatedRoom.then((res)=>{
-                    console.log(res)
-                  });        
-                }
-              })
-          }
+            })
+          })
+          console.log(state.getState());
+        })
+      }
 
-        }).then((data)=>{
-          // consoleo ID
-          state.setUserId(data.id)
-          state.setName(userName)
-          if(selectedOption == "pre-room"){
-          
-          }
-  
-          if(selectedOption == "new-room"){
-            const cs = state.getState();
-            const userId = cs.userId;
-            const newCreatedRoom = state.createRoom(userId)
-            newCreatedRoom.then((res)=>{
-              console.log(res)
-            });  
-          }
-        });
-
-   
-
-        // if(selectedOption == "pre-room"){
-          
-        // }
-
-        // if(selectedOption == "new-room"){
-        //   const cs = state.getState();
-        //   console.log(cs)
-        //   const userId = cs.userId;
-        //   console.log(userId)
-        //   // const newCreatedRoom = state.createRoom(userId)
-        //   // newCreatedRoom.then((res)=>{
-        //   //   console.log(res)
-        //   // });
-        //   // state.setChatroomId(newCreatedRoom)
-
-        // }
-
-        // console.log(selectedOption)
     });
-
-   
-
-
 
     this.shadow.appendChild(style);
     this.shadow.appendChild(root);

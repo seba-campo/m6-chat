@@ -7,8 +7,8 @@ import { nanoid } from "nanoid";
 const app = express();
 const port = 3152;
 
-app.use(cors());
 app.use(bodyParser.json());
+app.use(cors());
 
 const userRef = db.collection("users");
 const roomRefDb = db.collection("rooms");
@@ -24,17 +24,17 @@ app.post("/signup", (req, res) => {
         .then((dbResponse) => {
             // verifico si existe
             if (dbResponse.empty) {
-                userRef
-                    .add({
+                userRef.add({
                         email,
                         nombre,
                     })
                     .then((newUserRef) => {
                         res.json({ id: newUserRef.id });
+                        console.log("User registered - id: " + newUserRef.id);
                     });
             } else {
                 res.status(400).json({
-                    message: "user already exists",
+                    message: "User already exists",
                 });
             }
         });
@@ -51,10 +51,12 @@ app.post("/auth", (req, res) => {
             // verifico si existe
             if (dbResponse.empty) {
                 res.status(400).json({
-                    message: "user does not exists",
+                    message: "User does not exists",
                 });
             } else {
+                // Retorno el ID del user
                 res.json({ id: dbResponse.docs[0].id });
+                console.log("User logged in - id: " + dbResponse.docs[0].id);
             }
         });
 });
@@ -90,6 +92,7 @@ app.post("/rooms", (req, res) => {
                                 res.json({
                                     id: roomId,
                                 });
+                                console.log("Chatroom created - id: " + roomId)
                             });
                     });
             } else {

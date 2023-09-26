@@ -3,7 +3,17 @@
 // import { API_URL_BASE } from ".";
 import { rtdb } from "./db";
 
-const API_URL_BASE = "http://localhost:3152";
+const pathName = window.location.href;
+
+var API_URL_BASE = "";
+
+if(pathName.startsWith("http://localhost")){
+  API_URL_BASE = "http://localhost:3152";
+}
+else{
+  API_URL_BASE = "https://api-chat-v2.onrender.com"
+}
+
 
 type Message = {
     from: string;
@@ -25,24 +35,16 @@ export const state = {
         const chatroomRef = rtdb.ref("/rooms/" + cs.rtdbChatroomId);
 
         chatroomRef.on("value", (snapshot) => {
-            const messagesFromServer = snapshot.val();
+            const messagesFromServer = snapshot.val(); 
             var messagesToAppend: any = [];
-            for (const key in messagesFromServer) {
-                messagesToAppend.push(messagesFromServer[key]);
+            for (const key in messagesFromServer.messages) {
+                messagesToAppend.push(messagesFromServer.messages[key]);
             }
             cs.messages = messagesToAppend;
             this.setState(cs);
         });
 
         callback();
-    },
-    init2(userName, userMail){
-        // Seteo Nombre y Mail para validar
-        state.setNameAndMail(userName, userMail)
-        // Valido nombre y mail
-        state.login(()=>{
-            console.log("se logeo correctamente");
-        })
     },
     subscribe(cb: (any) => any) {
         // recibe callbacks para ser avisados posteriormente
@@ -87,7 +89,7 @@ export const state = {
                     return res.json();
                 }
                 else{
-                    console.log("Registrando usuario...")
+                    console.log("New user, registering...")
                     return this.registerNewUser()
                 }
             }).then((data)=>{
@@ -154,6 +156,7 @@ export const state = {
     },
     getMessages() {
         const messageList = this.getState();
+
         return messageList.messages;
     },
     setState(newState) {

@@ -120,18 +120,29 @@ class Home extends HTMLElement {
       
       if(selectedOption == "pre-room"){
         // Obtengo el ROOM a ingresar, y lo seteo en el STATE
-        const chatroomId = chatroomInput.value;
-        state.setChatroomId(chatroomId)
+        const chatroomId = chatroomInput.value.toUpperCase();
+      
+        state.login(()=>{
+          console.log(userName ,"  - Logged in")
+          state.setChatroomId(chatroomId)
+          state.connectToRoom(()=>{
+            console.log("Connected to Room - ", chatroomId)
+            state.initChat(()=>{
+              console.log("Starting Chat")
+              Router.go("/chat")
+            })
+          })
+        })
       }
       if(selectedOption == "new-room"){
         state.login(()=>{
-          console.log("Logged in")
+          console.log(userName ,"  - Logged in")
           state.createRoom(()=>{
             console.log("Room created")
             state.connectToRoom(()=>{
-              console.log("Connected to Room")
+              console.log("Random room created, connecting...")
               state.initChat(()=>{
-                console.log("Chat inicializado")
+                console.log("Starting Chat")
                 Router.go("/chat")
               })
             })

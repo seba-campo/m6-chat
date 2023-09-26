@@ -16,7 +16,6 @@ class Chat extends HTMLElement {
       state.subscribe(() => {
           const cs = state.getState();
           this.messages = cs.messages;
-          console.log(cs.messages)
           this.render();
       });
 
@@ -37,10 +36,16 @@ class Chat extends HTMLElement {
       });
     }
     render() {
+      const cs = state.getState();
+
         this.innerHTML = `
       <div class="chat-root-div">
         <div class="chat-root-div__title-div">
-          <h1 class="chat-root-div__tile-h1">CHAT PAGE</h1>  
+          <h1 class="chat-root-div__tile-h1">CHAT PAGE </h1>  
+        </div>
+
+        <div>
+          <h1 class="chat-root-div__tile-h1">Id: ${cs.chatroomId}</h1>            
         </div>
 
         <div class="chat-root-div__messages">

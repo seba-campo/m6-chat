@@ -28,6 +28,7 @@ export const state = {
         chatroomId: "",
         rtdbChatroomId: "",
         messages: [],
+        deployed: false,
     },
     listeners: [],
     initChat(callback) {
@@ -164,5 +165,10 @@ export const state = {
         for (const cb of this.listeners) {
             cb();
         }
+    },
+    setDeployedStatus(status: boolean){
+        const cs = this.getState();
+        cs.deployed = status;
+        this.setState(cs);
     },
 };

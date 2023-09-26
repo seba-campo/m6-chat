@@ -129,7 +129,15 @@ class Home extends HTMLElement {
             console.log("Connected to Room - ", chatroomId)
             state.initChat(()=>{
               console.log("Starting Chat")
-              Router.go("/chat")
+              const cs = state.getState();
+              switch(cs.deployed){
+                case true: 
+                  Router.go("/m6-chat/chat")
+                  break
+                case false:
+                  Router.go("/chat")
+                  break
+              }
             })
           })
         })
@@ -143,11 +151,18 @@ class Home extends HTMLElement {
               console.log("Random room created, connecting...")
               state.initChat(()=>{
                 console.log("Starting Chat")
-                Router.go("/chat")
+                const cs = state.getState();
+                switch(cs.deployed){
+                  case true: 
+                    Router.go("/m6-chat/chat")
+                    break
+                  case false:
+                    Router.go("/chat")
+                    break
+                }
               })
             })
           })
-          console.log(state.getState());
         })
       }
 

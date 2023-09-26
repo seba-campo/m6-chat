@@ -94,12 +94,13 @@ class Chat extends HTMLElement {
         flex-direction: column;
         justify-content: space-evenly;
         align-items: flex-start;
-        padding: 25px 30px;
+        padding: 0px 30px;
+        overflow-y: scroll;
       }
 
       .message-div{
         filter: opacity(100%);
-        max-width: 10vw;
+        max-width: 20vw;
         max-height: 14vh;
         padding: 8px 4px;
         display: flex; 
@@ -107,11 +108,12 @@ class Chat extends HTMLElement {
         background-color: #025c4c;
         color: #ccdedb;
         border-radius: 4px;
+        margin: 5px 0;
       }
 
       .message-from{
         margin: 0;
-        font-size: 15px;
+        font-size: 16px;
         font-weight: 600;
       }
 
